@@ -88,12 +88,12 @@ elif option=='Channels':
         'Authorization' : 'Bearer '+str(access_token),
     }
     with st.form(key='my_form'):
-        text_input = st.text_input(label='Enter some text')
+        text_input = st.text_input(label='Enter Channel')
         submit_button = st.form_submit_button(label='Submit')
     if text_input:
         channel_response=requests.get('https://api.twitch.tv/helix/search/channels?query='+text_input,headers=headers)
         channel_response_json=json.loads(channel_response.text)
-        st.write(channel_response_json)
+        # st.write(channel_response_json)
         channel_data=channel_response_json['data']
         num_of_results = len(channel_data)
         st.subheader("Showing {} Channels".format(num_of_results))
@@ -101,6 +101,7 @@ elif option=='Channels':
             col1, col2 = st.columns([1,3])
             with col1:
                 image1=temp['thumbnail_url'].replace("{width}", "100").replace("{height}", "100")
+                st.write(temp['display_name'])
                 st.image(image1)
             with col2:
                 channel_live=temp['is_live']
