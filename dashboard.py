@@ -108,6 +108,14 @@ elif option=='Channels':
                 if(channel_live):
                     st.success("Channel is LIVE right now")
                     st.write("Current Stream Name -->>",temp['title'])
+                    
+                    # st.write(temp['id'])
+                    video_response=requests.get('https://api.twitch.tv/helix/streams?user_id='+temp['id'],headers=headers)
+                    video_response_json=json.loads(video_response.text)
+                    # st.write(video_response_json['data'][0]["viewer_count"])
+                    # st.info('Viewers  ',temp[])
+                    st.info('Viewers Count -->'+str(video_response_json['data'][0]["viewer_count"]))
+                    
                 else:
                     st.error("Channel is Not LIVE right now.")
 
