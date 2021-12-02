@@ -6,6 +6,12 @@ import requests
 from pandas.io.json import json_normalize
 import time
 import threading
+import Fetch
+import Footer
+
+from pymongo import MongoClient
+
+CONNECTION_STRING = "mongodb+srv://suraj:wtcsproject@wtcs.sweig.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
 client_id= 'kfdicyd8nct8dwqd8vy7zrc8jn5sfw'
 client_secret= 'o77rnssqevendjf22z2sb21erif5n9'
@@ -24,12 +30,20 @@ option=st.sidebar.selectbox("Look Into",Menu,1)
 st.header(option)
 
 if option=='Games':
+    my_bar = st.progress(0)
+    for percent_complete in range(100):
+        time.sleep(0.01)
+        my_bar.progress(percent_complete + 1)
+
+    @st.cache
+    def insert():
+        import Test
+        Test.exec()
+
+    
     def twitch():
-        threading.Timer(1000.0, twitch).start()
-        my_bar = st.progress(0)
-        for percent_complete in range(100):
-            time.sleep(0.01)
-            my_bar.progress(percent_complete + 1)
+        threading.Timer(100.0, twitch).start()
+        
         st.subheader('Top 15 Games On twitch Right Now')
     
         # Top Games
@@ -37,11 +51,12 @@ if option=='Games':
             'Client-ID' : client_id,
             'Authorization' : 'Bearer '+str(access_token),
         }
-        games_response = requests.get('https://api.twitch.tv/helix/games/top?first=15', headers=headers)
-    
-        games_response_json = json.loads(games_response.text)
-        # st.write(games_response_json)
-        topgames_data = games_response_json['data']
+        insert()
+        # topgames_data = games_response_json['data']
+        topgames_data_t=Fetch.res
+        # st.write(topgames_data_t)
+        topgames_data=topgames_data_t['data']
+        # topgames_data=json.loads(topgames_data_t.text)
         for message in topgames_data:
             game_name=message['name']
             st.write('--',game_name)
@@ -58,18 +73,13 @@ if option=='Games':
                     stream_response = requests.get(final_url, headers=headers)
                     stream_response_json = json.loads(stream_response.text)
                     topstreamers_data=stream_response_json['data']
+                    
                     count=1
                     for i in topstreamers_data:
                         st.write(count,')',i['user_name'])
                         count+=1
                     # st.write(stream_response_json)
-            # st.write('Analytics on '+game_name )
-            # URLt='https://api.twitch.tv/helix/analytics/games?game_id={}'
-            # final_urlt=URLt.format(message['id'])
-            # Analytics = requests.get(final_urlt, headers=headers)
-            # Analytics_json = json.loads(Analytics.text)
-            # # Analytics_data=Analytics_json['data']
-            # st.write(Analytics_json)
+            
 
 
         # topgames_df = pd.DataFrame.from_dict(json_normalize(topgames_data), orient='columns')
@@ -89,7 +99,7 @@ elif option=='Channels':
     }
     with st.form(key='my_form'):
         text_input = st.text_input(label='Enter Channel')
-        submit_button = st.form_submit_button(label='Submit')
+        submit_button = st.form_submit_button(label='Find')
     if text_input:
         channel_response=requests.get('https://api.twitch.tv/helix/search/channels?query='+text_input,headers=headers)
         channel_response_json=json.loads(channel_response.text)
@@ -119,3 +129,4 @@ elif option=='Channels':
                 else:
                     st.error("Channel is Not LIVE right now.")
 
+Footer.footer()
