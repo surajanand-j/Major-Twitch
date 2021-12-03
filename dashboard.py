@@ -11,7 +11,7 @@ import Fetch
 import Footer
 import config
 from itertools import cycle
-from streamlit_player import st_player
+
 from pymongo import MongoClient
 
 
