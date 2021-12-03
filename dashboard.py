@@ -10,6 +10,7 @@ import threading
 import Fetch
 import Footer
 import config
+import Insert
 from itertools import cycle
 
 from pymongo import MongoClient
@@ -26,7 +27,7 @@ access_token = access_token['access_token']
     # st.write(access_token)
 st.sidebar.write('MENU')
 Menu=['Games','Channels','Know Twitch Better']
-option=st.sidebar.selectbox("Look Into",Menu)
+option=st.sidebar.selectbox("Look Into",Menu,1)
 st.header(option)
 
 if option=='Games':
@@ -36,9 +37,8 @@ if option=='Games':
         my_bar.progress(percent_complete + 1)
 
     @st.cache
-    def insert():
-        import Insert_Game
-        Insert_Game.exec()
+    def insert_games():
+        Insert.exec()
 
     
     def twitch():
@@ -51,7 +51,7 @@ if option=='Games':
             'Client-ID' : config.client_id,
             'Authorization' : 'Bearer '+str(access_token),
         }
-        insert()
+        insert_games()
         # topgames_data = games_response_json['data']
         topgames_data_t=Fetch.res
         # st.write(topgames_data_t)
@@ -135,6 +135,63 @@ elif option=='Channels':
         'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
     }
+    # @st.cache(ttl=300)
+    def insert_stream():
+        Insert.exec1()
+    def repeat():
+        threading.Timer(1000.0, repeat).start()
+        insert_stream()
+    repeat()
+
+    st.subheader("Top 20 Active Streamers on Twitch")
+    Streamers_data=Fetch.report
+    Streamers_data=Streamers_data["data"]
+    idx = 0 
+    Imag=[]
+    Type=[]
+    game_name=[]
+    title=[]
+    viewer_count=[]
+    started_at=[]
+    user_name=[]
+    for ths in Streamers_data:
+            Imag.append(ths['thumbnail_url'].replace("{width}", "120").replace("{height}", "200"))
+            Type.append(ths['type'])
+            game_name.append(ths['game_name'])
+            title.append(ths['title'])
+            viewer_count.append(ths['viewer_count'])
+            started_at.append(ths['started_at'])
+            user_name.append(ths['user_name'])
+           
+    for _ in range(len(Streamers_data)-1): 
+        cols = st.columns(4) 
+
+        if idx < len(Streamers_data): 
+            with cols[0]:
+                st.image(Imag[idx])
+            
+
+        if idx < len(Streamers_data):
+            with cols[1]:
+                st.error(user_name[idx])
+                st.info('Viewers :'+str(viewer_count[idx]))
+                st.success("Game Name :"+game_name[idx])
+            idx+=1
+        if idx < len(Streamers_data): 
+            with cols[2]:
+                st.image(Imag[idx])
+            
+
+        if idx < len(Streamers_data):
+            with cols[3]:
+                st.error(user_name[idx])
+                st.info('Viewers :'+str(viewer_count[idx]))
+                st.success("Game Name :"+game_name[idx])
+            idx+=1
+            
+        else:
+            break
+    
     with st.form(key='my_form'):
         text_input = st.text_input(label='Enter Channel')
         submit_button = st.form_submit_button(label='Find')
