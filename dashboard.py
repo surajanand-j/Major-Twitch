@@ -37,8 +37,8 @@ if option=='Games':
 
     @st.cache
     def insert():
-        import Test
-        Test.exec()
+        import Insert_Game
+        Insert_Game.exec()
 
     
     def twitch():
