@@ -1,3 +1,4 @@
+from os import link
 import streamlit as st;
 import pandas as pd;
 import numpy as np;
@@ -8,16 +9,15 @@ import time
 import threading
 import Fetch
 import Footer
-
+import config
+from itertools import cycle
+from streamlit_player import st_player
 from pymongo import MongoClient
 
-CONNECTION_STRING = "mongodb+srv://suraj:wtcsproject@wtcs.sweig.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
-client_id= 'kfdicyd8nct8dwqd8vy7zrc8jn5sfw'
-client_secret= 'o77rnssqevendjf22z2sb21erif5n9'
 
 #Request for the access code using requests library
-access_code = requests.post('https://id.twitch.tv/oauth2/token?client_id='+str(client_id)+'&client_secret='+str(client_secret)+'&grant_type=client_credentials')
+access_code = requests.post('https://id.twitch.tv/oauth2/token?client_id='+str(config.client_id)+'&client_secret='+str(config.client_secret)+'&grant_type=client_credentials')
 
 #access token response is a JSON-encoded app access token
 access_token = json.loads(access_code.text)
@@ -25,8 +25,8 @@ access_token = access_token['access_token']
 
     # st.write(access_token)
 st.sidebar.write('MENU')
-Menu=['Games','Channels']
-option=st.sidebar.selectbox("Look Into",Menu,1)
+Menu=['Games','Channels','Know Twitch Better']
+option=st.sidebar.selectbox("Look Into",Menu)
 st.header(option)
 
 if option=='Games':
@@ -48,7 +48,7 @@ if option=='Games':
     
         # Top Games
         headers = {
-            'Client-ID' : client_id,
+            'Client-ID' : config.client_id,
             'Authorization' : 'Bearer '+str(access_token),
         }
         insert()
@@ -59,11 +59,15 @@ if option=='Games':
         # topgames_data=json.loads(topgames_data_t.text)
         for message in topgames_data:
             game_name=message['name']
-            st.write('--',game_name)
+            st.write('Game Name - ',game_name)
             col1, col2 = st.columns([1,3])
             with col1:
                 img=message['box_art_url'].replace("{width}", "100").replace("{height}", "100")
                 st.image(img)
+                clips_response=requests.get('https://api.twitch.tv/helix/clips?first=8&game_id='+message['id'],headers=headers)
+                clips_response_json=json.loads(clips_response.text)
+                clips_data=clips_response_json['data']
+                # st.write(clips_response_json)
             with col2:
                 with st.expander('Show Popular Streamers of -> '+game_name):
                     tempo=message['id']
@@ -79,8 +83,42 @@ if option=='Games':
                         st.write(count,')',i['user_name'])
                         count+=1
                     # st.write(stream_response_json)
-            
+            st.write('Popular clips of: '+game_name)
+            filteredImages = []
+            clips_link=[] 
+            for ths in clips_data:
+                filteredImages.append(ths['thumbnail_url'])
+                clips_link.append(ths['url'])
+            # caption = [] # your caption here
+            idx = 0 
+            for _ in range(len(filteredImages)-1): 
+                cols = st.columns(4) 
+        
+                if idx < len(filteredImages): 
+                    cols[0].image(filteredImages[idx], width=150)
+                    with cols[0]:
+                        st.write('[open in twitch](%s)'%clips_link[idx])
+                    idx+=1
+        
+                if idx < len(filteredImages):
+                    cols[1].image(filteredImages[idx], width=150)
+                    with cols[1]:
+                        st.write('[open in twitch](%s)'%clips_link[idx])
+                    idx+=1
 
+                if idx < len(filteredImages):
+                    cols[2].image(filteredImages[idx], width=150)
+                    with cols[2]:
+                        st.write('[open in twitch](%s)'%clips_link[idx])
+                    idx+=1 
+                if idx < len(filteredImages): 
+                    cols[3].image(filteredImages[idx], width=150)
+                    with cols[3]:
+                        st.write('[open in twitch](%s)'%clips_link[idx])
+                    idx = idx + 1
+                else:
+                    break
+                # st.write("[Open in Twitch](filteredImage['url'])")
 
         # topgames_df = pd.DataFrame.from_dict(json_normalize(topgames_data), orient='columns')
         # export_topgames_csv = topgames_df.to_csv (r'C:/Users/suraj_gjnx4vc/Desktop/Major Twitch/topgames.csv', index = None, header=True)
@@ -91,10 +129,10 @@ elif option=='Channels':
     for percent_complete in range(100):
         time.sleep(0.01)
         my_bar.progress(percent_complete + 1)
-    st.subheader('See all the Analytics of Streams on Twitch')
+    st.subheader('Search Channels')
     
     headers = {
-        'Client-ID' : client_id,
+        'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
     }
     with st.form(key='my_form'):
@@ -104,6 +142,7 @@ elif option=='Channels':
         channel_response=requests.get('https://api.twitch.tv/helix/search/channels?query='+text_input,headers=headers)
         channel_response_json=json.loads(channel_response.text)
         # st.write(channel_response_json)
+        
         channel_data=channel_response_json['data']
         num_of_results = len(channel_data)
         st.subheader("Showing {} Channels".format(num_of_results))
@@ -111,10 +150,19 @@ elif option=='Channels':
             col1, col2 = st.columns([1,3])
             with col1:
                 image1=temp['thumbnail_url'].replace("{width}", "100").replace("{height}", "100")
-                st.write(temp['display_name'])
+                st.write('Channel Name :',temp['display_name'])
                 st.image(image1)
             with col2:
                 channel_live=temp['is_live']
+                Emote_response=requests.get('https://api.twitch.tv/helix/chat/emotes?broadcaster_id='+temp['id'],headers=headers)
+                Emote_response_json=json.loads(Emote_response.text)
+                Emote_Data=Emote_response_json['data']
+                
+                # filteredImages = [] # your images here
+                # caption = [] # your caption here
+                
+                        
+                # st.write(Emote_response_json)
                 if(channel_live):
                     st.success("Channel is LIVE right now")
                     st.write("Current Stream Name -->>",temp['title'])
@@ -122,11 +170,17 @@ elif option=='Channels':
                     # st.write(temp['id'])
                     video_response=requests.get('https://api.twitch.tv/helix/streams?user_id='+temp['id'],headers=headers)
                     video_response_json=json.loads(video_response.text)
-                    # st.write(video_response_json['data'][0]["viewer_count"])
+                    
                     # st.info('Viewers  ',temp[])
                     st.info('Viewers Count -->'+str(video_response_json['data'][0]["viewer_count"]))
                     
                 else:
                     st.error("Channel is Not LIVE right now.")
-
+            if(Emote_Data):
+                st.write('Emotes of this Channel are:')
+                cols = cycle(st.columns(10)) # st.columns here since it is out of beta at the time I'm writing this
+                for idx, filteredImage in enumerate(Emote_Data):
+                    next(cols).image(filteredImage['images']['url_1x'])
+elif option=='Know Twitch Better':
+    st.subheader('TO DO')
 Footer.footer()

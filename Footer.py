@@ -28,7 +28,7 @@ def layout(*args):
         bottom=0,
         margin=px(0, 0, 0, 0),
         width=percent(100),
-        color="yellow",
+        color="#b0cf4a",
         text_align="center",
         height="auto",
         opacity=1
