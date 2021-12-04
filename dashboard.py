@@ -135,7 +135,7 @@ elif option=='Channels':
         'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
     }
-    @st.cache(ttl=300)
+    @st.cache(ttl=600)
     def insert_stream():
         Insert.exec1()
     # def repeat():
