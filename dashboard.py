@@ -40,9 +40,9 @@ if option=='Games':
     def insert_games():
         Insert.exec()
 
-    @st.cache
+    # @st.cache
     def twitch():
-    #     threading.Timer(100.0, twitch).start()
+        threading.Timer(1000.0, twitch).start()
         
         st.subheader('Top 15 Games On twitch Right Now')
 
