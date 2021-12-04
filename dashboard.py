@@ -64,7 +64,7 @@ if option=='Games':
             with col1:
                 img=message['box_art_url'].replace("{width}", "100").replace("{height}", "100")
                 st.image(img)
-                clips_response=requests.get('https://api.twitch.tv/helix/clips?first=8&game_id='+message['id'],headers=headers)
+                clips_response=requests.get('https://api.twitch.tv/helix/clips?first=4&game_id='+message['id'],headers=headers)
                 clips_response_json=json.loads(clips_response.text)
                 clips_data=clips_response_json['data']
                 # st.write(clips_response_json)
@@ -129,19 +129,19 @@ elif option=='Channels':
     for percent_complete in range(100):
         time.sleep(0.01)
         my_bar.progress(percent_complete + 1)
-    st.subheader('Search Channels')
+    
     
     headers = {
         'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
     }
-    # @st.cache(ttl=300)
+    @st.cache(ttl=300)
     def insert_stream():
         Insert.exec1()
-    def repeat():
-        threading.Timer(1000.0, repeat).start()
-        insert_stream()
-    repeat()
+    # def repeat():
+    #     threading.Timer(1000.0, repeat).start()
+    #     insert_stream()
+    insert_stream()
 
     st.subheader("Top 20 Active Streamers on Twitch")
     Streamers_data=Fetch.report
@@ -155,7 +155,7 @@ elif option=='Channels':
     started_at=[]
     user_name=[]
     for ths in Streamers_data:
-            Imag.append(ths['thumbnail_url'].replace("{width}", "120").replace("{height}", "200"))
+            Imag.append(ths['thumbnail_url'].replace("{width}", "150").replace("{height}", "200"))
             Type.append(ths['type'])
             game_name.append(ths['game_name'])
             title.append(ths['title'])
@@ -173,7 +173,7 @@ elif option=='Channels':
 
         if idx < len(Streamers_data):
             with cols[1]:
-                st.error(user_name[idx])
+                st.error('User :'+user_name[idx])
                 st.info('Viewers :'+str(viewer_count[idx]))
                 st.success("Game Name :"+game_name[idx])
             idx+=1
@@ -184,7 +184,7 @@ elif option=='Channels':
 
         if idx < len(Streamers_data):
             with cols[3]:
-                st.error(user_name[idx])
+                st.error('User :'+user_name[idx])
                 st.info('Viewers :'+str(viewer_count[idx]))
                 st.success("Game Name :"+game_name[idx])
             idx+=1
@@ -192,6 +192,7 @@ elif option=='Channels':
         else:
             break
     
+    st.subheader('Search Channels')
     with st.form(key='my_form'):
         text_input = st.text_input(label='Enter Channel')
         submit_button = st.form_submit_button(label='Find')
