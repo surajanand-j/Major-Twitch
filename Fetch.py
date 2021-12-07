@@ -6,12 +6,11 @@ client = MongoClient(config.CONNECTION_STRING)
 db=client['Twitch']
 col=db['Games']
 #games
-res=col.find_one()
+res=col.find_one(sort=[( '_id', -1 )])
+# st.write(res)
+
 
 col1=db['Streams']
 #streamers
-report = col1.find_one(
-  
-  sort=[( 'Time', -1 )]
-)
+report = col1.find_one(sort=[( 'Time', -1 )])
 # st.write(report)

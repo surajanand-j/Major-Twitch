@@ -37,13 +37,13 @@ if option=='Games':
         time.sleep(0.01)
         my_bar.progress(percent_complete + 1)
 
-    @st.cache
+    @st.cache(ttl=600)
     def insert_games():
         Insert.exec()
-
+    insert_games()
     # @st.cache
     def twitch():
-        threading.Timer(1000.0, twitch).start()
+        # threading.Timer(1000.0, twitch).start()
         
         st.subheader('Top 15 Categories/Games On twitch Right Now')
 
@@ -52,7 +52,7 @@ if option=='Games':
             'Client-ID' : config.client_id,
             'Authorization' : 'Bearer '+str(access_token),
         }
-        insert_games()
+        
         # topgames_data = games_response_json['data']
         topgames_data_t=Fetch.res
         # st.write(topgames_data_t)
@@ -137,7 +137,7 @@ elif option=='Channels':
         'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
     }
-    @st.cache(ttl=600)
+    @st.cache(ttl=6000)
     def insert_stream():
         Insert.exec1()
     # def repeat():
@@ -179,7 +179,7 @@ elif option=='Channels':
             with cols[0]:
                 st.image(Imag[idx])
                 #watch on twitch hyperlink
-                st.write('[Watch '+user_name[idx]+' on Twitch](%s)'%stream_url[idx])
+                st.warning('[Watch '+user_name[idx]+' on Twitch](%s)'%stream_url[idx])
                 
             
         if idx < len(Streamers_data):
@@ -201,7 +201,7 @@ elif option=='Channels':
                 )
 
             st.area_chart(chart_data)
-            idx+=1
+            
         
         else:
             break
@@ -218,13 +218,7 @@ elif option=='Search Channel':
         'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
     }
-    @st.cache(ttl=600)
-    def insert_stream():
-        Insert.exec1()
-    # def repeat():
-    #     threading.Timer(1000.0, repeat).start()
-    #     insert_stream()
-    insert_stream()
+    
 
 
     # Search Bar
