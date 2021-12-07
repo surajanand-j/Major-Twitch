@@ -26,10 +26,11 @@ access_token = access_token['access_token']
 
     # st.write(access_token)
 st.sidebar.write('MENU')
-Menu=['Games','Channels','Know Twitch Better']
+Menu=['Games','Channels', 'Search Channel', 'Know Twitch Better']
 option=st.sidebar.selectbox("Look Into",Menu,1)
-st.header(option)
+# st.header(option)
 
+#Page 1 Top Games
 if option=='Games':
     my_bar = st.progress(0)
     for percent_complete in range(100):
@@ -44,7 +45,7 @@ if option=='Games':
     def twitch():
         threading.Timer(1000.0, twitch).start()
         
-        st.subheader('Top 15 Games On twitch Right Now')
+        st.subheader('Top 15 Categories/Games On twitch Right Now')
 
         # Top Games
         headers = {
@@ -124,6 +125,7 @@ if option=='Games':
         # export_topgames_csv = topgames_df.to_csv (r'C:/Users/suraj_gjnx4vc/Desktop/Major Twitch/topgames.csv', index = None, header=True)
     twitch()
 
+#Page 2 Channels/Streamers
 elif option=='Channels':
     my_bar = st.progress(0)
     for percent_complete in range(100):
@@ -145,7 +147,9 @@ elif option=='Channels':
 
     st.subheader("Top 20 Active Streamers on Twitch")
     Streamers_data=Fetch.report
+    # print(Streamers_data.keys())
     Streamers_data=Streamers_data["data"]
+    # display data save
     idx = 0 
     Imag=[]
     Type=[]
@@ -154,44 +158,76 @@ elif option=='Channels':
     viewer_count=[]
     started_at=[]
     user_name=[]
+    stream_url = []
+
     for ths in Streamers_data:
-            Imag.append(ths['thumbnail_url'].replace("{width}", "150").replace("{height}", "200"))
+            Imag.append(ths['thumbnail_url'].replace("{width}", "400").replace("{height}", "250"))
             Type.append(ths['type'])
             game_name.append(ths['game_name'])
             title.append(ths['title'])
             viewer_count.append(ths['viewer_count'])
             started_at.append(ths['started_at'])
             user_name.append(ths['user_name'])
-           
-    for _ in range(len(Streamers_data)-1): 
-        cols = st.columns(4) 
+
+            stream_url.append('https://www.twitch.tv/'+ths['user_name'])
+
+    # Printing Sreamer Data on Channels Page
+    for _ in range(len(Streamers_data)-1):  
+        cols = st.columns(2)
 
         if idx < len(Streamers_data): 
             with cols[0]:
                 st.image(Imag[idx])
+                #watch on twitch hyperlink
+                st.write('[Watch '+user_name[idx]+' on Twitch](%s)'%stream_url[idx])
+                
             
-
         if idx < len(Streamers_data):
             with cols[1]:
-                st.error('User :'+user_name[idx])
-                st.info('Viewers :'+str(viewer_count[idx]))
-                st.success("Game Name :"+game_name[idx])
+                
+                st.success('User : '+user_name[idx])
+                st.error('Viewers : '+str(viewer_count[idx]))
+                st.info("Stream Category : "+game_name[idx])
             idx+=1
-        if idx < len(Streamers_data): 
-            with cols[2]:
-                st.image(Imag[idx])
-            
+
 
         if idx < len(Streamers_data):
-            with cols[3]:
-                st.error('User :'+user_name[idx])
-                st.info('Viewers :'+str(viewer_count[idx]))
-                st.success("Game Name :"+game_name[idx])
+            # Here goes Viewercount Data Per Streamer (in the same order as the Top Streamer List)
+            st.markdown("<p style='text-align: center; color: white;'>Viewcount Trend</p>", unsafe_allow_html=True)
+
+            chart_data = pd.DataFrame(
+                np.random.randn(20, 3),
+                columns=['a', 'b', 'c']
+                )
+
+            st.area_chart(chart_data)
             idx+=1
-            
+        
         else:
             break
+        
     
+
+elif option=='Search Channel':
+    my_bar = st.progress(0)
+    for percent_complete in range(100):
+        time.sleep(0.01)
+        my_bar.progress(percent_complete + 1)
+
+    headers = {
+        'Client-ID' : config.client_id,
+        'Authorization' : 'Bearer '+str(access_token),
+    }
+    @st.cache(ttl=600)
+    def insert_stream():
+        Insert.exec1()
+    # def repeat():
+    #     threading.Timer(1000.0, repeat).start()
+    #     insert_stream()
+    insert_stream()
+
+
+    # Search Bar
     st.subheader('Search Channels')
     with st.form(key='my_form'):
         text_input = st.text_input(label='Enter Channel')
@@ -239,6 +275,10 @@ elif option=='Channels':
                 cols = cycle(st.columns(10)) # st.columns here since it is out of beta at the time I'm writing this
                 for idx, filteredImage in enumerate(Emote_Data):
                     next(cols).image(filteredImage['images']['url_1x'])
-elif option=='Know Twitch Better':
-    st.subheader('TO DO')
+
+
+
+    elif option=='Know Twitch Better':
+        st.subheader('TO DO')
+
 Footer.footer()

@@ -5,9 +5,11 @@ import pymongo
 client = MongoClient(config.CONNECTION_STRING)
 db=client['Twitch']
 col=db['Games']
+#games
 res=col.find_one()
 
 col1=db['Streams']
+#streamers
 report = col1.find_one(
   
   sort=[( 'Time', -1 )]
