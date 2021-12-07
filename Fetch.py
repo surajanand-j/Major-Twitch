@@ -13,4 +13,4 @@ res=col.find_one(sort=[( '_id', -1 )])
 col1=db['Streams']
 #streamers
 report = col1.find_one(sort=[( 'Time', -1 )])
-st.write(report)
+# st.write(report)
