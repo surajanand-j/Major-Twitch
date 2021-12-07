@@ -145,66 +145,69 @@ elif option=='Channels':
     #     insert_stream()
     insert_stream()
 
-    st.subheader("Top 20 Active Streamers on Twitch")
-    Streamers_data=Fetch.report
-    # print(Streamers_data.keys())
-    Streamers_data=Streamers_data["data"]
-    # display data save
-    idx = 0 
-    Imag=[]
-    Type=[]
-    game_name=[]
-    title=[]
-    viewer_count=[]
-    started_at=[]
-    user_name=[]
-    stream_url = []
 
-    for ths in Streamers_data:
-            Imag.append(ths['thumbnail_url'].replace("{width}", "400").replace("{height}", "250"))
-            Type.append(ths['type'])
-            game_name.append(ths['game_name'])
-            title.append(ths['title'])
-            viewer_count.append(ths['viewer_count'])
-            started_at.append(ths['started_at'])
-            user_name.append(ths['user_name'])
+    def twitch1():
+        st.subheader("Top 20 Active Streamers on Twitch")
+        Streamers_data=Fetch.report
+        # print(Streamers_data.keys())
+        Streamers_data=Streamers_data["data"]
+        # display data save
+        idx = 0 
+        Imag=[]
+        Type=[]
+        game_name=[]
+        title=[]
+        viewer_count=[]
+        started_at=[]
+        user_name=[]
+        stream_url = []
 
-            stream_url.append('https://www.twitch.tv/'+ths['user_name'])
+        for ths in Streamers_data:
+                Imag.append(ths['thumbnail_url'].replace("{width}", "400").replace("{height}", "250"))
+                Type.append(ths['type'])
+                game_name.append(ths['game_name'])
+                title.append(ths['title'])
+                viewer_count.append(ths['viewer_count'])
+                started_at.append(ths['started_at'])
+                user_name.append(ths['user_name'])
 
-    # Printing Sreamer Data on Channels Page
-    for _ in range(len(Streamers_data)-1):  
-        cols = st.columns(2)
+                stream_url.append('https://www.twitch.tv/'+ths['user_name'])
 
-        if idx < len(Streamers_data): 
-            with cols[0]:
-                st.image(Imag[idx])
-                #watch on twitch hyperlink
-                st.warning('[Watch '+user_name[idx]+' on Twitch](%s)'%stream_url[idx])
+        # Printing Sreamer Data on Channels Page
+        for _ in range(len(Streamers_data)-1):  
+            cols = st.columns(2)
+
+            if idx < len(Streamers_data): 
+                with cols[0]:
+                    st.image(Imag[idx])
+                    #watch on twitch hyperlink
+                    st.warning('[Watch '+user_name[idx]+' on Twitch](%s)'%stream_url[idx])
+                    
+                
+            if idx < len(Streamers_data):
+                with cols[1]:
+                    
+                    st.success('User : '+user_name[idx])
+                    st.error('Viewers : '+str(viewer_count[idx]))
+                    st.info("Stream Category : "+game_name[idx])
+                idx+=1
+
+
+            if idx < len(Streamers_data):
+                # Here goes Viewercount Data Per Streamer (in the same order as the Top Streamer List)
+                st.markdown("<p style='text-align: center; color: white;'>Viewcount Trend</p>", unsafe_allow_html=True)
+
+                chart_data = pd.DataFrame(
+                    np.random.randn(20, 3),
+                    columns=['a', 'b', 'c']
+                    )
+
+                st.area_chart(chart_data)
                 
             
-        if idx < len(Streamers_data):
-            with cols[1]:
-                
-                st.success('User : '+user_name[idx])
-                st.error('Viewers : '+str(viewer_count[idx]))
-                st.info("Stream Category : "+game_name[idx])
-            idx+=1
-
-
-        if idx < len(Streamers_data):
-            # Here goes Viewercount Data Per Streamer (in the same order as the Top Streamer List)
-            st.markdown("<p style='text-align: center; color: white;'>Viewcount Trend</p>", unsafe_allow_html=True)
-
-            chart_data = pd.DataFrame(
-                np.random.randn(20, 3),
-                columns=['a', 'b', 'c']
-                )
-
-            st.area_chart(chart_data)
-            
-        
-        else:
-            break
+            else:
+                break
+    twitch1()
         
     
 

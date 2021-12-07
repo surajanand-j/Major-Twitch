@@ -60,7 +60,7 @@ def exec1():
     stream_response_json.update(dict)
     dbname = client['Twitch']
     collection_name = dbname["Streams"]
-
+    collection_name.delete_many({'error':"Unauthorized"})
     if isinstance(stream_response_json, list):
         collection_name.insert_many(stream_response_json)  
     else:
