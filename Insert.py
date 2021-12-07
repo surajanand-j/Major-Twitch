@@ -20,16 +20,24 @@ headers = {
             'Client-ID' : config.client_id,
             'Authorization' : 'Bearer '+str(access_token),
         }
+        
 def exec():
  
     client = MongoClient(config.CONNECTION_STRING)
     games_response = requests.get('https://api.twitch.tv/helix/games/top?first=15', headers=headers)
-    
     games_response_json = json.loads(games_response.text)
+
+
+    #adding time to top games
+    now=datetime.now()
+    formatted_datetime =now.isoformat()
+    dict={"Time":formatted_datetime}
+    games_response_json.update(dict)
+
     dbname = client['Twitch']
-    if games_response.status_code != 500:
-        if('Games' in dbname.list_collection_names()):
-            dbname['Games'].drop()
+    # if games_response.status_code != 500:
+    #     if('Games' in dbname.list_collection_names()):
+    #         dbname['Games'].drop()
 
     collection_name = dbname["Games"]
 
@@ -39,10 +47,12 @@ def exec():
         collection_name.insert_one(games_response_json)
 # print(collection_name)
 # print(games_response_json)
+
 def exec1():
     client = MongoClient(config.CONNECTION_STRING)
     stream_response = requests.get('https://api.twitch.tv/helix/streams', headers=headers)
     stream_response_json = json.loads(stream_response.text)
+
     now=datetime.now()
     formatted_datetime =now.isoformat()
     dict={"Time":formatted_datetime}
