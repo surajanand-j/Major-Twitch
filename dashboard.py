@@ -18,10 +18,10 @@ from pymongo import MongoClient
 
 
 #Request for the access code using requests library
-access_code = requests.post('https://id.twitch.tv/oauth2/token?client_id='+str(config.client_id)+'&client_secret='+str(config.client_secret)+'&grant_type=client_credentials')
+# access_code = requests.post('https://id.twitch.tv/oauth2/token?client_id='+str(config.client_id)+'&client_secret='+str(config.client_secret)+'&grant_type=client_credentials')
 
 #access token response is a JSON-encoded app access token
-access_token = json.loads(access_code.text)
+access_token = json.loads(config.access_code.text)
 access_token = access_token['access_token']
 
     # st.write(access_token)
@@ -98,24 +98,24 @@ if option=='Games':
                 if idx < len(filteredImages): 
                     cols[0].image(filteredImages[idx], width=150)
                     with cols[0]:
-                        st.write('[open in twitch](%s)'%clips_link[idx])
+                        st.warning('[open in twitch](%s)'%clips_link[idx])
                     idx+=1
 
                 if idx < len(filteredImages):
                     cols[1].image(filteredImages[idx], width=150)
                     with cols[1]:
-                        st.write('[open in twitch](%s)'%clips_link[idx])
+                        st.warning('[open in twitch](%s)'%clips_link[idx])
                     idx+=1
 
                 if idx < len(filteredImages):
                     cols[2].image(filteredImages[idx], width=150)
                     with cols[2]:
-                        st.write('[open in twitch](%s)'%clips_link[idx])
+                        st.warning('[open in twitch](%s)'%clips_link[idx])
                     idx+=1 
                 if idx < len(filteredImages): 
                     cols[3].image(filteredImages[idx], width=150)
                     with cols[3]:
-                        st.write('[open in twitch](%s)'%clips_link[idx])
+                        st.warning('[open in twitch](%s)'%clips_link[idx])
                     idx = idx + 1
                 else:
                     break
@@ -133,11 +133,8 @@ elif option=='Channels':
         my_bar.progress(percent_complete + 1)
     
     
-    headers = {
-        'Client-ID' : config.client_id,
-        'Authorization' : 'Bearer '+str(access_token),
-    }
-    @st.cache(ttl=6000)
+    
+    @st.cache(ttl=60*5,max_entries=25)
     def insert_stream():
         Insert.exec1()
     # def repeat():
@@ -147,7 +144,12 @@ elif option=='Channels':
 
 
     def twitch1():
+        # threading.Timer(1000.0, twitch1).start()
         st.subheader("Top 20 Active Streamers on Twitch")
+        headers = {
+        'Client-ID' : config.client_id,
+        'Authorization' : 'Bearer '+str(access_token),
+        }
         Streamers_data=Fetch.report
         # print(Streamers_data.keys())
         Streamers_data=Streamers_data["data"]
