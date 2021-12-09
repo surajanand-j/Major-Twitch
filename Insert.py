@@ -6,10 +6,10 @@ import config
 from datetime import datetime
 
 #Request for the access code using requests library
-access_code = requests.post('https://id.twitch.tv/oauth2/token?client_id='+str(config.client_id)+'&client_secret='+str(config.client_secret)+'&grant_type=client_credentials')
+# access_code = requests.post('https://id.twitch.tv/oauth2/token?client_id='+str(config.client_id)+'&client_secret='+str(config.client_secret)+'&grant_type=client_credentials')
 
 #access token response is a JSON-encoded app access token
-access_token = json.loads(access_code.text)
+access_token = json.loads(config.access_code.text)
 access_token = access_token['access_token']
 
 
