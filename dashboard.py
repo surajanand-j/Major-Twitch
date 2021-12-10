@@ -1,7 +1,7 @@
 from os import link
-import streamlit as st;
-import pandas as pd;
-import numpy as np;
+import streamlit as st
+import pandas as pd
+import numpy as np
 import json
 import requests
 from pandas.io.json import json_normalize
@@ -153,7 +153,7 @@ elif option=='Channels':
 
     def twitch1():
         # threading.Timer(1000.0, twitch1).start()
-        st.subheader("Top 20 Active Streamers on Twitch")
+        st.subheader("Top Active Stream on Twitch Right Now")
         headers = {
         'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
@@ -215,7 +215,11 @@ elif option=='Channels':
                 def fetch_viewcount(name, filepath):
                     newdf = pd.read_csv(filepath)
                     newdf = newdf.loc[newdf['user_name'] == name]
-                    newdf['time'] = int(np.ceil(dp.parse(newdf['time'].values[0]).timestamp()))
+                    # converting time into seconds (int)
+                    if not newdf.empty:
+                        newdf['time'] = int(np.ceil(dp.parse(newdf['time'].values[0]).timestamp()))
+                      
+                    newdf.reset_index(drop=True)
                     newdf.set_index('time', drop=True)
                     #return newdf[['viewer_count', 'time']]
                     return newdf['viewer_count']
@@ -226,14 +230,16 @@ elif option=='Channels':
                 #     np.random.randn(20, 3),
                 #     columns=['a', 'b', 'c']
                 #     )
-                
-                if chart_data.empty is False:
-                    # st.area_chart(chart_data)
-                    st.line_chart(chart_data)
-                    # st.bar_chart(chart_data)
                 # fig = plt.plot(chart_data['viewer_count'])
                 # fig = plt.xticks(range(len(chart_data['time'])), chart_data['time'])
                 # st.pyplot(fig)
+                
+                if not chart_data.empty:
+                    # st.area_chart(chart_data)
+                    st.line_chart(chart_data)
+                    # st.bar_chart(chart_data)
+                else:
+                    st.write('Insufficient Data')
                 
             else:
                 break
