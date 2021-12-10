@@ -30,14 +30,24 @@ access_token = access_token['access_token']
 st.sidebar.write('MENU')
 Menu=['Channels','Games', 'Search Channel', 'Know Twitch Better']
 option=st.sidebar.selectbox("Look Into",Menu,0)
-# st.header(option)
 
-#Page 1 Top Games
-if option=='Games':
+def loading_bar():
     my_bar = st.progress(0)
     for percent_complete in range(100):
         time.sleep(0.01)
         my_bar.progress(percent_complete + 1)
+
+def header_print():
+    st.markdown("<h1 style='text-align: center; color: ;'>Metrics Twitchify</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: ;'>Welcome to Metrics Twitchify.<br> This website was created as a final year project as CS students. <br>We hope you find it useful!</p>", unsafe_allow_html=True)
+    
+    # st.header("Metrics Twitchify")
+    # st.write("Welcome to Metrics Twitchify. This website was created as a final year project as CS students. We hope you find it useful!")
+
+#Page 1 Top Games
+if option=='Games':
+    header_print()
+    loading_bar()
 
     @st.cache(ttl=600)
     def insert_games():
@@ -129,12 +139,8 @@ if option=='Games':
 
 #Page 2 Channels/Streamers
 elif option=='Channels':
-    my_bar = st.progress(0)
-    for percent_complete in range(100):
-        time.sleep(0.01)
-        my_bar.progress(percent_complete + 1)
-    
-    
+    header_print()
+    loading_bar()
     
     @st.cache(ttl=60*5,max_entries=25)
     def insert_stream():
@@ -236,18 +242,14 @@ elif option=='Channels':
     
 
 elif option=='Search Channel':
-    my_bar = st.progress(0)
-    for percent_complete in range(100):
-        time.sleep(0.01)
-        my_bar.progress(percent_complete + 1)
+    header_print()
+    loading_bar()
 
     headers = {
         'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
     }
     
-
-
     # Search Bar
     st.subheader('Search Channels')
     with st.form(key='my_form'):
@@ -299,7 +301,10 @@ elif option=='Search Channel':
 
 
 
-    elif option=='Know Twitch Better':
-        st.subheader('TO DO')
+elif option=='Know Twitch Better':
+#else:
+    header_print()
+    loading_bar()
+    st.write('TO DO')
 
 Footer.footer()
