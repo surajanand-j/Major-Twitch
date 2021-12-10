@@ -1,18 +1,20 @@
 from os import link
-import streamlit as st;
-import pandas as pd;
-import numpy as np;
+import streamlit as st
+import pandas as pd
+import numpy as np
 import json
 import requests
 from pandas.io.json import json_normalize
 import time
-import threading
 import Fetch
 import Footer
 import config
 import Insert
 from itertools import cycle
+import dateutil.parser as dp
 
+
+import viewcount_create
 from pymongo import MongoClient
 
 
@@ -26,16 +28,26 @@ access_token = access_token['access_token']
 
     # st.write(access_token)
 st.sidebar.write('MENU')
-Menu=['Games','Channels', 'Search Channel', 'Know Twitch Better']
-option=st.sidebar.selectbox("Look Into",Menu,1)
-# st.header(option)
+Menu=['Channels','Games', 'Search Channel', 'Know Twitch Better']
+option=st.sidebar.selectbox("Look Into",Menu,0)
 
-#Page 1 Top Games
-if option=='Games':
+def loading_bar():
     my_bar = st.progress(0)
     for percent_complete in range(100):
         time.sleep(0.01)
         my_bar.progress(percent_complete + 1)
+
+def header_print():
+    st.markdown("<h1 style='text-align: center; color: ;'>Metrics Twitchify</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: ;'>Welcome to Metrics Twitchify.<br> This website was created as a final year project as CS students. <br>We hope you find it useful!</p>", unsafe_allow_html=True)
+    
+    # st.header("Metrics Twitchify")
+    # st.write("Welcome to Metrics Twitchify. This website was created as a final year project as CS students. We hope you find it useful!")
+
+#Page 1 Top Games
+if option=='Games':
+    header_print()
+    loading_bar()
 
     @st.cache(ttl=600)
     def insert_games():
@@ -63,7 +75,7 @@ if option=='Games':
             st.write('Game Name - ',game_name)
             col1, col2 = st.columns([1,3])
             with col1:
-                img=message['box_art_url'].replace("{width}", "100").replace("{height}", "100")
+                img=message['box_art_url'].replace("{width}", "150").replace("{height}", "200")
                 st.image(img)
                 clips_response=requests.get('https://api.twitch.tv/helix/clips?first=4&game_id='+message['id'],headers=headers)
                 clips_response_json=json.loads(clips_response.text)
@@ -127,12 +139,8 @@ if option=='Games':
 
 #Page 2 Channels/Streamers
 elif option=='Channels':
-    my_bar = st.progress(0)
-    for percent_complete in range(100):
-        time.sleep(0.01)
-        my_bar.progress(percent_complete + 1)
-    
-    
+    header_print()
+    loading_bar()
     
     @st.cache(ttl=60*5,max_entries=25)
     def insert_stream():
@@ -145,7 +153,7 @@ elif option=='Channels':
 
     def twitch1():
         # threading.Timer(1000.0, twitch1).start()
-        st.subheader("Top 20 Active Streamers on Twitch")
+        st.subheader("Top Active Stream on Twitch Right Now")
         headers = {
         'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
@@ -196,17 +204,43 @@ elif option=='Channels':
 
 
             if idx < len(Streamers_data):
+
                 # Here goes Viewercount Data Per Streamer (in the same order as the Top Streamer List)
                 st.markdown("<p style='text-align: center; color: white;'>Viewcount Trend</p>", unsafe_allow_html=True)
 
-                chart_data = pd.DataFrame(
-                    np.random.randn(20, 3),
-                    columns=['a', 'b', 'c']
-                    )
+                # Processing Viewer count data from database
+                viewcount_create.viewcount_data_create()
 
-                st.area_chart(chart_data)
+                # get sreamer viewcount data
+                def fetch_viewcount(name, filepath):
+                    newdf = pd.read_csv(filepath)
+                    newdf = newdf.loc[newdf['user_name'] == name]
+                    # converting time into seconds (int)
+                    if not newdf.empty:
+                        newdf['time'] = int(np.ceil(dp.parse(newdf['time'].values[0]).timestamp()))
+                      
+                    newdf.reset_index(drop=True)
+                    newdf.set_index('time', drop=True)
+                    #return newdf[['viewer_count', 'time']]
+                    return newdf['viewer_count']
+
+                chart_data = fetch_viewcount(user_name[idx], 'streams_processed.csv')
+
+                # chart_data = pd.DataFrame(
+                #     np.random.randn(20, 3),
+                #     columns=['a', 'b', 'c']
+                #     )
+                # fig = plt.plot(chart_data['viewer_count'])
+                # fig = plt.xticks(range(len(chart_data['time'])), chart_data['time'])
+                # st.pyplot(fig)
                 
-            
+                if not chart_data.empty:
+                    # st.area_chart(chart_data)
+                    st.line_chart(chart_data)
+                    # st.bar_chart(chart_data)
+                else:
+                    st.write('Insufficient Data')
+                
             else:
                 break
     twitch1()
@@ -214,18 +248,14 @@ elif option=='Channels':
     
 
 elif option=='Search Channel':
-    my_bar = st.progress(0)
-    for percent_complete in range(100):
-        time.sleep(0.01)
-        my_bar.progress(percent_complete + 1)
+    header_print()
+    loading_bar()
 
     headers = {
         'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
     }
     
-
-
     # Search Bar
     st.subheader('Search Channels')
     with st.form(key='my_form'):
@@ -277,7 +307,10 @@ elif option=='Search Channel':
 
 
 
-    elif option=='Know Twitch Better':
-        st.subheader('TO DO')
+elif option=='Know Twitch Better':
+#else:
+    header_print()
+    loading_bar()
+    st.write('TO DO')
 
 Footer.footer()
