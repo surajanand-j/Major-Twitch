@@ -1,4 +1,4 @@
 pymongo
 pymongo[srv]
 htbuilder
-dateutil.parser==2.8.0
+# dateutil.parser==2.8.0
