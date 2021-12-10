@@ -49,7 +49,7 @@ if option=='Games':
     header_print()
     loading_bar()
 
-    @st.cache(ttl=600)
+    @st.cache(ttl=60*5)
     def insert_games():
         Insert.exec()
     insert_games()
@@ -142,7 +142,7 @@ elif option=='Channels':
     header_print()
     loading_bar()
     
-    @st.cache(ttl=60*5,max_entries=25)
+    @st.cache(ttl=60*5)
     def insert_stream():
         Insert.exec1()
     # def repeat():
