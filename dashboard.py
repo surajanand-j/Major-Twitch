@@ -6,13 +6,11 @@ import json
 import requests
 from pandas.io.json import json_normalize
 import time
-import threading
 import Fetch
 import Footer
 import config
 import Insert
 from itertools import cycle
-import matplotlib.pyplot as plt
 import dateutil.parser as dp
 
 
