@@ -200,7 +200,7 @@ elif option=='Channels':
                     st.success('User : '+user_name[idx])
                     st.error('Viewers : '+str(viewer_count[idx]))
                     st.info("Stream Category : "+game_name[idx])
-                idx+=1
+                
 
 
             if idx < len(Streamers_data):
@@ -240,7 +240,7 @@ elif option=='Channels':
                     # st.bar_chart(chart_data)
                 else:
                     st.write('Insufficient Data')
-                
+                idx+=1 
             else:
                 break
     twitch1()
