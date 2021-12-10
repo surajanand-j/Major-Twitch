@@ -12,7 +12,11 @@ import Footer
 import config
 import Insert
 from itertools import cycle
+import matplotlib.pyplot as plt
+import dateutil.parser as dp
 
+
+import viewcount_create
 from pymongo import MongoClient
 
 
@@ -26,8 +30,8 @@ access_token = access_token['access_token']
 
     # st.write(access_token)
 st.sidebar.write('MENU')
-Menu=['Games','Channels', 'Search Channel', 'Know Twitch Better']
-option=st.sidebar.selectbox("Look Into",Menu,1)
+Menu=['Channels','Games', 'Search Channel', 'Know Twitch Better']
+option=st.sidebar.selectbox("Look Into",Menu,0)
 # st.header(option)
 
 #Page 1 Top Games
@@ -63,7 +67,7 @@ if option=='Games':
             st.write('Game Name - ',game_name)
             col1, col2 = st.columns([1,3])
             with col1:
-                img=message['box_art_url'].replace("{width}", "100").replace("{height}", "100")
+                img=message['box_art_url'].replace("{width}", "150").replace("{height}", "200")
                 st.image(img)
                 clips_response=requests.get('https://api.twitch.tv/helix/clips?first=4&game_id='+message['id'],headers=headers)
                 clips_response_json=json.loads(clips_response.text)
@@ -196,17 +200,37 @@ elif option=='Channels':
 
 
             if idx < len(Streamers_data):
+
                 # Here goes Viewercount Data Per Streamer (in the same order as the Top Streamer List)
                 st.markdown("<p style='text-align: center; color: white;'>Viewcount Trend</p>", unsafe_allow_html=True)
 
-                chart_data = pd.DataFrame(
-                    np.random.randn(20, 3),
-                    columns=['a', 'b', 'c']
-                    )
+                # Processing Viewer count data from database
+                viewcount_create.viewcount_data_create()
 
-                st.area_chart(chart_data)
+                # get sreamer viewcount data
+                def fetch_viewcount(name, filepath):
+                    newdf = pd.read_csv(filepath)
+                    newdf = newdf.loc[newdf['user_name'] == name]
+                    newdf['time'] = int(np.ceil(dp.parse(newdf['time'].values[0]).timestamp()))
+                    newdf.set_index('time', drop=True)
+                    #return newdf[['viewer_count', 'time']]
+                    return newdf['viewer_count']
+
+                chart_data = fetch_viewcount(user_name[idx], 'streams_processed.csv')
+
+                # chart_data = pd.DataFrame(
+                #     np.random.randn(20, 3),
+                #     columns=['a', 'b', 'c']
+                #     )
                 
-            
+                if chart_data.empty is False:
+                    # st.area_chart(chart_data)
+                    st.line_chart(chart_data)
+                    # st.bar_chart(chart_data)
+                # fig = plt.plot(chart_data['viewer_count'])
+                # fig = plt.xticks(range(len(chart_data['time'])), chart_data['time'])
+                # st.pyplot(fig)
+                
             else:
                 break
     twitch1()
