@@ -215,7 +215,7 @@ elif option=='Channels':
 
                 # get sreamer viewcount data
                 def fetch_viewcount(name, filepath):
-                    newdf = pd.read_csv(filepath)
+                    newdf = pd.read_csv(filepath,parse_dates=['time'])
                     newdf = newdf.loc[newdf['user_name'] == name]
 
                     # converting time into seconds (int)
@@ -249,8 +249,8 @@ elif option=='Channels':
                         y=alt.Y('viewer_count:Q')
                     )   
                     st.altair_chart(chart, use_container_width=True)
-                    # chart_data = chart_data.rename(columns={'time':'index'}).set_index('index')
-                    # st.line_chart(chart_data)
+                    chart_data = chart_data.rename(columns={'time':'index'}).set_index('index')
+                    st.line_chart(chart_data)
                 else:
                     st.write('Insufficient Data')
                 idx+=1 
