@@ -49,7 +49,7 @@ if option=='Games':
     header_print()
     loading_bar()
 
-    @st.cache(ttl=60*5)
+    @st.cache(ttl=60*2)
     def insert_games():
         Insert.exec()
     insert_games()
@@ -142,7 +142,7 @@ elif option=='Channels':
     header_print()
     loading_bar()
     
-    @st.cache(ttl=60*5)
+    @st.cache(ttl=60*2)
     def insert_stream():
         Insert.exec1()
     # def repeat():
@@ -236,6 +236,7 @@ elif option=='Channels':
                 
                 if not chart_data.empty:
                     # st.area_chart(chart_data)
+                    chart_data=chart_data.set_index('date')
                     st.line_chart(chart_data)
                     # st.bar_chart(chart_data)
                 else:
