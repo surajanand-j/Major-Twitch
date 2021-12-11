@@ -12,6 +12,8 @@ import config
 import Insert
 from itertools import cycle
 import dateutil.parser as dp
+import altair as alt
+import datetime
 
 
 import viewcount_create
@@ -215,14 +217,16 @@ elif option=='Channels':
                 def fetch_viewcount(name, filepath):
                     newdf = pd.read_csv(filepath)
                     newdf = newdf.loc[newdf['user_name'] == name]
+
                     # converting time into seconds (int)
-                    if not newdf.empty:
-                        newdf['time'] = int(np.ceil(dp.parse(newdf['time'].values[0]).timestamp()))
+                
+                    # if not newdf.empty:
+                    #     newdf['time'] = int(np.ceil(dp.parse(newdf['time'].values[0]).timestamp()))
                       
-                    newdf.reset_index(drop=True)
-                    newdf.set_index('time', drop=True)
-                    #return newdf[['viewer_count', 'time']]
-                    return newdf['viewer_count']
+                    newdf.reset_index(inplace = True)
+                    # newdf.set_index('time', drop=True)
+                    return newdf[['viewer_count', 'time']]
+                    # return newdf
 
                 chart_data = fetch_viewcount(user_name[idx], 'streams_processed.csv')
 
@@ -237,8 +241,16 @@ elif option=='Channels':
                 if not chart_data.empty:
                     # st.area_chart(chart_data)
                     # chart_data=chart_data.set_index('date')
-                    st.line_chart(chart_data)
+                    # st.line_chart(chart_data)
                     # st.bar_chart(chart_data)
+                    # st.write(chart_data)
+                    chart=alt.Chart(chart_data).mark_line().encode(
+                        x=alt.X('time:T', axis=alt.Axis(tickCount=chart_data.shape[0],grid=False)),
+                        y=alt.Y('viewer_count:Q')
+                    )   
+                    st.altair_chart(chart, use_container_width=True)
+                    # chart_data = chart_data.rename(columns={'time':'index'}).set_index('index')
+                    # st.line_chart(chart_data)
                 else:
                     st.write('Insufficient Data')
                 idx+=1 
