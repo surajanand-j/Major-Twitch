@@ -57,7 +57,7 @@ if option=='Games':
     insert_games()
     # @st.cache
     def twitch():
-        threading.Timer(1000.0, twitch).start()
+        # threading.Timer(100.0, twitch).start()
         
         st.subheader('Top 15 Categories/Games On twitch Right Now')
 
@@ -154,7 +154,7 @@ elif option=='Channels':
 
 
     def twitch1():
-        threading.Timer(1000.0, twitch1).start()
+        # threading.Timer(100.0, twitch1).start()
         st.subheader("Top Active Stream on Twitch Right Now")
         headers = {
         'Client-ID' : config.client_id,
@@ -188,7 +188,8 @@ elif option=='Channels':
         # Printing Sreamer Data on Channels Page
         for _ in range(len(Streamers_data)-1):  
             cols = st.columns(2)
-
+            if user_name[idx]=='Amouranth':
+                idx+=1
             if idx < len(Streamers_data): 
                 with cols[0]:
                     st.image(Imag[idx])
@@ -215,7 +216,7 @@ elif option=='Channels':
 
                 # get sreamer viewcount data
                 def fetch_viewcount(name, filepath):
-                    newdf = pd.read_csv(filepath,parse_dates=['time'])
+                    newdf = pd.read_csv(filepath)
                     newdf = newdf.loc[newdf['user_name'] == name]
 
                     # converting time into seconds (int)
@@ -244,11 +245,12 @@ elif option=='Channels':
                     # st.line_chart(chart_data)
                     # st.bar_chart(chart_data)
                     # st.write(chart_data)
-                    chart=alt.Chart(chart_data).mark_line().encode(
-                        x=alt.X('time:T', axis=alt.Axis(tickCount=chart_data.shape[0],grid=False)),
-                        y=alt.Y('viewer_count:Q')
-                    )   
+                    # chart=alt.Chart(chart_data).mark_line().encode(
+                    #     x=alt.X('time:T', axis=alt.Axis(tickCount=chart_data.shape[0],grid=False)),
+                    #     y=alt.Y('viewer_count:Q')
+                    # )   
                     # st.altair_chart(chart, use_container_width=True)
+                    chart_data['time'] =  pd.to_datetime(chart_data['time'])
                     chart_data = chart_data.rename(columns={'time':'index'}).set_index('index')
                     st.line_chart(chart_data)
                 else:
