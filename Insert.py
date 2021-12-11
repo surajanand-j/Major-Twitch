@@ -4,6 +4,7 @@ import json
 import requests
 import config
 from datetime import datetime
+from pytz import timezone
 
 #Request for the access code using requests library
 # access_code = requests.post('https://id.twitch.tv/oauth2/token?client_id='+str(config.client_id)+'&client_secret='+str(config.client_secret)+'&grant_type=client_credentials')
@@ -53,7 +54,7 @@ def exec1():
     stream_response = requests.get('https://api.twitch.tv/helix/streams', headers=headers)
     stream_response_json = json.loads(stream_response.text)
 
-    now=datetime.now()
+    now=datetime.now(timezone("Asia/Kolkata"))
     formatted_datetime =now.isoformat()
     dict={"Time":formatted_datetime}
     # json_datetime = json.loads(json.dumps(formatted_datetime))
