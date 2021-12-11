@@ -13,7 +13,7 @@ import Insert
 from itertools import cycle
 import dateutil.parser as dp
 import altair as alt
-import datetime
+import threading
 
 
 import viewcount_create
@@ -57,7 +57,7 @@ if option=='Games':
     insert_games()
     # @st.cache
     def twitch():
-        # threading.Timer(1000.0, twitch).start()
+        threading.Timer(1000.0, twitch).start()
         
         st.subheader('Top 15 Categories/Games On twitch Right Now')
 
@@ -154,7 +154,7 @@ elif option=='Channels':
 
 
     def twitch1():
-        # threading.Timer(1000.0, twitch1).start()
+        threading.Timer(1000.0, twitch1).start()
         st.subheader("Top Active Stream on Twitch Right Now")
         headers = {
         'Client-ID' : config.client_id,
@@ -248,7 +248,7 @@ elif option=='Channels':
                         x=alt.X('time:T', axis=alt.Axis(tickCount=chart_data.shape[0],grid=False)),
                         y=alt.Y('viewer_count:Q')
                     )   
-                    st.altair_chart(chart, use_container_width=True)
+                    # st.altair_chart(chart, use_container_width=True)
                     chart_data = chart_data.rename(columns={'time':'index'}).set_index('index')
                     st.line_chart(chart_data)
                 else:
