@@ -4,13 +4,14 @@ import config
 import pymongo
 client = MongoClient(config.CONNECTION_STRING)
 db=client['Twitch']
-col=db['Games']
-#games
-res=col.find_one(sort=[( 'Time', -1 )])
+def games_data():
+    col=db['Games']
+    res=col.find_one(sort=[( 'Time', -1 )])
+    return res
 # st.write(res)
 
-
-col1=db['Streams']
-#streamers
-report = col1.find_one(sort=[( 'Time', -1 )])
+def stream_data():
+    col1=db['Streams']
+    report = col1.find_one(sort=[( 'Time', -1 )])
+    return report
 # st.write(report)

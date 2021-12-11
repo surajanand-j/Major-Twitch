@@ -68,7 +68,7 @@ if option=='Games':
         }
         
         # topgames_data = games_response_json['data']
-        topgames_data_t=Fetch.res
+        topgames_data_t=Fetch.games_data()
         # st.write(topgames_data_t)
         topgames_data=topgames_data_t['data']
         # topgames_data=json.loads(topgames_data_t.text)
@@ -160,7 +160,8 @@ elif option=='Channels':
         'Client-ID' : config.client_id,
         'Authorization' : 'Bearer '+str(access_token),
         }
-        Streamers_data=Fetch.report
+
+        Streamers_data=Fetch.stream_data()
         # print(Streamers_data.keys())
         Streamers_data=Streamers_data["data"]
         # display data save
@@ -231,25 +232,8 @@ elif option=='Channels':
 
                 chart_data = fetch_viewcount(user_name[idx], 'streams_processed.csv')
 
-                # chart_data = pd.DataFrame(
-                #     np.random.randn(20, 3),
-                #     columns=['a', 'b', 'c']
-                #     )
-                # fig = plt.plot(chart_data['viewer_count'])
-                # fig = plt.xticks(range(len(chart_data['time'])), chart_data['time'])
-                # st.pyplot(fig)
                 
                 if not chart_data.empty:
-                    # st.area_chart(chart_data)
-                    # chart_data=chart_data.set_index('date')
-                    # st.line_chart(chart_data)
-                    # st.bar_chart(chart_data)
-                    # st.write(chart_data)
-                    # chart=alt.Chart(chart_data).mark_line().encode(
-                    #     x=alt.X('time:T', axis=alt.Axis(tickCount=chart_data.shape[0],grid=False)),
-                    #     y=alt.Y('viewer_count:Q')
-                    # )   
-                    # st.altair_chart(chart, use_container_width=True)
                     chart_data['time'] =  pd.to_datetime(chart_data['time'])
                     chart_data = chart_data.rename(columns={'time':'index'}).set_index('index')
                     st.line_chart(chart_data)
