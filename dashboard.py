@@ -35,6 +35,7 @@ Menu=['Channels','Games', 'Search Channel', 'Know Twitch Better']
 option=st.sidebar.selectbox("Look Into",Menu,0)
 
 def loading_bar():
+    # displays a loading bar that shows how much the page has loaded.
     my_bar = st.progress(0)
     for percent_complete in range(100):
         time.sleep(0.01)
