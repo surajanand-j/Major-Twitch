@@ -14,6 +14,7 @@ from itertools import cycle
 import dateutil.parser as dp
 import altair as alt
 import threading
+from datetime import timedelta
 
 
 import viewcount_create
@@ -234,7 +235,8 @@ elif option=='Channels':
 
                 
                 if not chart_data.empty:
-                    chart_data['time'] =  pd.to_datetime(chart_data['time'])
+                    chart_data['time'] =  pd.to_datetime(chart_data['time'])+timedelta(hours=5,minutes=30)
+                    # st.write(chart_data)
                     chart_data = chart_data.rename(columns={'time':'index'}).set_index('index')
                     st.line_chart(chart_data)
                 else:
