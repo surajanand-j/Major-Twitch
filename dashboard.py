@@ -297,13 +297,14 @@ elif option=='Search Channel':
                     video_response_json=json.loads(video_response.text)
                     
                     # st.info('Viewers  ',temp[])
-                    st.info('Viewers Count -->'+str(video_response_json['data'][0]["viewer_count"]))
+                    if(video_response_json['data']):
+                        st.info('Viewers Count -->'+str(video_response_json['data'][0]["viewer_count"]))
                     
                 else:
                     st.error("Channel is Not LIVE right now.")
             if(Emote_Data):
                 st.write('Emotes of this Channel are:')
-                cols = cycle(st.columns(10)) # st.columns here since it is out of beta at the time I'm writing this
+                cols = cycle(st.columns(10)) 
                 for idx, filteredImage in enumerate(Emote_Data):
                     next(cols).image(filteredImage['images']['url_1x'])
 
