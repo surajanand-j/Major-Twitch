@@ -12,7 +12,7 @@ import config
 import Insert
 from itertools import cycle
 import dateutil.parser as dp
-import altair as alt
+
 import threading
 from datetime import timedelta
 
