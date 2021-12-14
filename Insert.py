@@ -30,7 +30,7 @@ def exec():
 
 
     #adding time to top games
-    now=datetime.now()
+    now=datetime.now(timezone("Asia/Kolkata"))
     formatted_datetime =now.isoformat()
     dict={"Time":formatted_datetime}
     games_response_json.update(dict)
