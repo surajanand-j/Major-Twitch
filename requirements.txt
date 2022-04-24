@@ -1,4 +1,5 @@
 pymongo
 pymongo[srv]
 htbuilder
+googleapiclient
 # dateutil.parser==2.8.0
