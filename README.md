@@ -5,7 +5,7 @@ With the help of Streamlit, Twitch API, MongoDB along with Python and various py
 we have been able to make a web application in which we are providing leaderboards and metrics
 for people who might be interested in twitch.
 
-## Visit the [Application](https://share.streamlit.io/surajanand-j/major-twitch/dashboard.py)
+## Visit the [Application](https://share.streamlit.io/surajanand-j/major-twitch/main.py)
 
 ## Preview
 
