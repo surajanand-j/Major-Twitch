@@ -51,7 +51,7 @@ def exec():
 
 def exec1():
     client = MongoClient(config.CONNECTION_STRING)
-    stream_response = requests.get('https://api.twitch.tv/helix/streams', headers=headers)
+    stream_response = requests.get('https://api.twitch.tv/helix/streams?first=6', headers=headers)
     stream_response_json = json.loads(stream_response.text)
 
     now=datetime.now(timezone("Asia/Kolkata"))

@@ -1,6 +1,4 @@
 import pandas as pd
-import dateutil.parser as dp
-import numpy as np
 import json
 
 def viewcount_data_create():
@@ -15,6 +13,7 @@ def viewcount_data_create():
             dict_format['time'].append(r[0])
             dict_format['user_name'].append(entry['user_name'])
             dict_format['viewer_count'].append(entry['viewer_count'])
+    dict_format_1 = sorted(dict_format.items(), key=lambda x: x[0])
 
     pd.DataFrame(dict_format).to_csv('streams_processed.csv')
 
