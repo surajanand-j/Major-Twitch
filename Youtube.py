@@ -1,16 +1,26 @@
 import googleapiclient.discovery
 import streamlit as st
+import random
 # API information
 api_service_name = "youtube"
 api_version = "v3"
-DEVELOPER_KEY = 'AIzaSyBZcdVS9CnU08k1VvAUph47BkY6lhK8CFQ'
-# API client
-youtube = googleapiclient.discovery.build(
-        api_service_name, api_version, developerKey = DEVELOPER_KEY)
+developer_key=[]
+DEVELOPER_KEY1 = 'AIzaSyBZcdVS9CnU08k1VvAUph47BkY6lhK8CFQ'
+DEVELOPER_KEY2 = 'AIzaSyA0DvUPENuoYgUnaXnFFAQ0mWjCLzOkUbk'
+DEVELOPER_KEY3 = 'AIzaSyAHddqbcSENsC5hyfXcK6gOrcxwsgJJLb4'
+developer_key.append(DEVELOPER_KEY1)
+developer_key.append(DEVELOPER_KEY2)
+developer_key.append(DEVELOPER_KEY3)
+
+
 
 # Notice that nextPageToken now is requested in 'fields' parameter
 def channel(arg_1):
     #Request for the first channel with this name
+    key_num=random.randint(0,2)
+    youtube = googleapiclient.discovery.build(
+        api_service_name, api_version, developerKey = developer_key[key_num])
+    
     request = youtube.search().list(
             part="snippet",
             q=arg_1,
