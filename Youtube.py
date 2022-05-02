@@ -29,6 +29,7 @@ def channel(arg_1):
     )
     response = request.execute()
     channel_id=response["items"][0]["id"]["channelId"]
+    
     #Request for channel info with channel_id
     # st.write(channel_id)
     Youtube_url="https://www.youtube.com/channel/"+channel_id
