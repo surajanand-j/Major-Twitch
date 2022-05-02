@@ -25,7 +25,7 @@ headers = {
 def exec():
  
     client = MongoClient(config.CONNECTION_STRING)
-    games_response = requests.get('https://api.twitch.tv/helix/games/top?first=15', headers=headers)
+    games_response = requests.get('https://api.twitch.tv/helix/games/top?first=6', headers=headers)
     games_response_json = json.loads(games_response.text)
 
 
