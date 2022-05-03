@@ -7,9 +7,9 @@ api_version = "v3"
 developer_key=[]
 
 
-# developer_key.append('AIzaSyA0DvUPENuoYgUnaXnFFAQ0mWjCLzOkUbk')
-# developer_key.append('AIzaSyAHddqbcSENsC5hyfXcK6gOrcxwsgJJLb4')
-# developer_key.append('AIzaSyBZcdVS9CnU08k1VvAUph47BkY6lhK8CFQ')
+developer_key.append('AIzaSyA0DvUPENuoYgUnaXnFFAQ0mWjCLzOkUbk')
+developer_key.append('AIzaSyAHddqbcSENsC5hyfXcK6gOrcxwsgJJLb4')
+developer_key.append('AIzaSyBZcdVS9CnU08k1VvAUph47BkY6lhK8CFQ')
 developer_key.append('AIzaSyBqh7alvQs4KVf9xp_C4-Uapf8JzH49bJw')
 developer_key.append('AIzaSyCg3rUiRNxAgbuLMI58IU0wttE0Kw1jrsA')
 developer_key.append('AIzaSyBOcJn10VzXgtpBSuhd1R-8yCD1CRecVog')
@@ -18,7 +18,7 @@ developer_key.append('AIzaSyBOcJn10VzXgtpBSuhd1R-8yCD1CRecVog')
 # Notice that nextPageToken now is requested in 'fields' parameter
 def channel(arg_1):
     #Request for the first channel with this name
-    key_num=random.randint(0,2)
+    key_num=random.randint(0,5)
     youtube = googleapiclient.discovery.build(
         api_service_name, api_version, developerKey = developer_key[key_num])
     
