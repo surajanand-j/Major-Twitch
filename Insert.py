@@ -5,7 +5,7 @@ import requests
 import config
 from datetime import datetime
 from pytz import timezone
-
+from top_50_for_today import Top_tracks_today
 #Request for the access code using requests library
 # access_code = requests.post('https://id.twitch.tv/oauth2/token?client_id='+str(config.client_id)+'&client_secret='+str(config.client_secret)+'&grant_type=client_credentials')
 
@@ -51,7 +51,7 @@ def exec():
 
 def exec1():
     client = MongoClient(config.CONNECTION_STRING)
-    stream_response = requests.get('https://api.twitch.tv/helix/streams?first=6', headers=headers)
+    stream_response = requests.get('https://api.twitch.tv/helix/streams?first=11', headers=headers)
     stream_response_json = json.loads(stream_response.text)
 
     now=datetime.now(timezone("Asia/Kolkata"))
@@ -67,4 +67,15 @@ def exec1():
     else:
         collection_name.insert_one(stream_response_json)
 
+def insert_spotify_data():
+    client = MongoClient(config.CONNECTION_STRING)
+    dbname=client['Twitch']
+    collection_name=dbname['Spotify Data']
+    # Top_tracks_today.reset_index(inplace=True)
+    # # now=datetime.now(timezone("Asia/Kolkata"))
+    # # formatted_datetime =now.isoformat()
+    # # dict={"Time":formatted_datetime}
+    # data_dict = Top_tracks_today
+    # data_dict.update(dict)
+    collection_name.insert_one(Top_tracks_today)
 

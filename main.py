@@ -8,12 +8,13 @@ import Channels
 import Games
 
 
-
-
     # st.write(access_token)
 st.sidebar.write('MENU')
-Menu=['Channels','Games', 'Search Channel', 'Know Twitch Better']
-option=st.sidebar.selectbox("Look Into",Menu,0)
+Menu=['Channels','Games', 'Search Channel', 'Know Twitch Better','Go to Spotify']
+option=st.sidebar.selectbox("Look into Twitch",Menu,0)
+# Menu2=['Spotify']
+# option2=st.sidebar.selectbox("Look into Spotify",Menu2)
+
 
 def loading_bar():
     # displays a loading bar that shows how much the page has loaded.
@@ -78,5 +79,9 @@ elif option=='Know Twitch Better':
     st.write("Additionally We have provided details about Twitch in the Know Twitch Better page where we have talked about the basics about twitch and how our website can be utilized.")
     st.header("What are Emotes?")
     st.write("When words just aren’t enough, there’s Emotes: Twitch-specific emoticons that viewers and streamers use to express a number of feelings in chat. Emotes are the <3 of Twitch culture. They’re a language of their own. They’re also a way for Partners and Affiliates to reinforce their branding and personalities, and give fans ways to celebrate epic moments, poke fun at fails, spread love in chat, and become active members of your community.")
+elif option=='Go to Spotify':
+    header_print()
+    loading_bar()
+    Insert.insert_spotify_data()
 
 Footer.footer()

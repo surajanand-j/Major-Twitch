@@ -3,7 +3,7 @@ import config
 import Fetch
 import requests
 import json
-import Youtube
+
 
 def twitch():
         # threading.Timer(100.0, twitch).start()
@@ -28,11 +28,11 @@ def twitch():
             yt_thumbnail=[]
             ##
             st.write('Game Name - ',game_name)
-            col1, col2,col3 = st.columns(3)
+            col1, col2 = st.columns(2)
             with col1:
                 img=message['box_art_url'].replace("{width}", "150").replace("{height}", "200")
                 st.image(img)
-                clips_response=requests.get('https://api.twitch.tv/helix/clips?first=2&game_id='+message['id'],headers=headers)
+                clips_response=requests.get('https://api.twitch.tv/helix/clips?first=4&game_id='+message['id'],headers=headers)
                 clips_response_json=json.loads(clips_response.text)
                 clips_data=clips_response_json['data']
                 # st.write(clips_response_json)
@@ -51,8 +51,8 @@ def twitch():
                     for i in topstreamers_data:
                         st.success(str(count)+') '+i['user_name'])
                         count+=1
-            with col3:
-                Youtube.games(game_name,video_url,yt_thumbnail)
+            # with col3:
+            #     Youtube.games(game_name,video_url,yt_thumbnail)
 
                     # st.write(stream_response_json)
             st.write('Popular clips of: '+game_name)
@@ -70,12 +70,19 @@ def twitch():
             cols[1].image(filteredImages[1], width=150)
             with cols[1]:
                     st.warning('[open in twitch](%s)'%clips_link[1]) 
-            cols[2].image(yt_thumbnail[0], width=150)
+            cols[2].image(filteredImages[2], width=150)
             with cols[2]:
-                    st.warning('[open in Youtube](%s)'%video_url[0])
-            cols[3].image(yt_thumbnail[1], width=150)
+                    st.warning('[open in twitch](%s)'%clips_link[2]) 
+            cols[3].image(filteredImages[3], width=150)
             with cols[3]:
-                    st.warning('[open in Youtube](%s)'%video_url[1])     
+                    st.warning('[open in twitch](%s)'%clips_link[3]) 
+            
+            # cols[2].image(yt_thumbnail[0], width=150)
+            # with cols[2]:
+            #         st.warning('[open in Youtube](%s)'%video_url[2])
+            # cols[3].image(yt_thumbnail[1], width=150)
+            # with cols[3]:
+            #         st.warning('[open in Youtube](%s)'%video_url[1])     
             
                 # st.write("[Open in Twitch](filteredImage['url'])")
 
