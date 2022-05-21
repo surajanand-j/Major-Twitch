@@ -15,3 +15,6 @@ def stream_data():
     report = col1.find_one(sort=[( 'Time', -1 )])
     return report
 # st.write(report)
+def Spotify_data():
+    col2=db['Spotify Data']
+    res2=col2.find
