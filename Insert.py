@@ -5,7 +5,7 @@ import requests
 import config
 from datetime import datetime
 from pytz import timezone
-from top_50_for_today import Top_tracks_today
+import top_50_for_today
 #Request for the access code using requests library
 # access_code = requests.post('https://id.twitch.tv/oauth2/token?client_id='+str(config.client_id)+'&client_secret='+str(config.client_secret)+'&grant_type=client_credentials')
 
@@ -77,5 +77,5 @@ def insert_spotify_data():
     # # dict={"Time":formatted_datetime}
     # data_dict = Top_tracks_today
     # data_dict.update(dict)
-    collection_name.insert_one(Top_tracks_today)
+    collection_name.insert_one(top_50_for_today.get_playlist_track_info())
 

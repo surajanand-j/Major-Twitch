@@ -6,11 +6,13 @@ import Insert
 import Search_channel
 import Channels
 import Games
-
+import spotify 
+import Fetch
+from top_50_for_today import Top_tracks_all_time
 
     # st.write(access_token)
 st.sidebar.write('MENU')
-Menu=['Channels','Games', 'Search Channel', 'Know Twitch Better','Go to Spotify']
+Menu=['Channels','Categories', 'Search Channel', 'Know Twitch Better','Spotify\'s Today\'s Hits','Spotify\'s All Time Hits']
 option=st.sidebar.selectbox("Look into Twitch",Menu,0)
 # Menu2=['Spotify']
 # option2=st.sidebar.selectbox("Look into Spotify",Menu2)
@@ -31,7 +33,7 @@ def header_print():
     # st.write("Welcome to Metrics Twitchify. This website was created as a final year project as CS students. We hope you find it useful!")
 
 #Page 1 Top Games
-if option=='Games':
+if option=='Categories':
     header_print()
     loading_bar()
 
@@ -40,7 +42,7 @@ if option=='Games':
     insert_games()
     # @st.cache
     
-    Games.twitch()
+    # Games.twitch()
 
 #Page 2 Channels/Streamers
 elif option=='Channels':
@@ -53,7 +55,7 @@ elif option=='Channels':
     #     threading.Timer(1000.0, repeat).start()
     #     insert_stream()
     insert_stream()
-    Channels.twitch1()
+    # Channels.twitch1()
         
     
 
@@ -79,9 +81,14 @@ elif option=='Know Twitch Better':
     st.write("Additionally We have provided details about Twitch in the Know Twitch Better page where we have talked about the basics about twitch and how our website can be utilized.")
     st.header("What are Emotes?")
     st.write("When words just aren’t enough, there’s Emotes: Twitch-specific emoticons that viewers and streamers use to express a number of feelings in chat. Emotes are the <3 of Twitch culture. They’re a language of their own. They’re also a way for Partners and Affiliates to reinforce their branding and personalities, and give fans ways to celebrate epic moments, poke fun at fails, spread love in chat, and become active members of your community.")
-elif option=='Go to Spotify':
+elif option=='Spotify\'s Today\'s Hits':
     header_print()
     loading_bar()
+    Result=Fetch.Spotify_data()
+    spotify.spotify_display(Result)
     Insert.insert_spotify_data()
-
+elif option=='Spotify\'s All Time Hits':
+    header_print()
+    loading_bar()
+    spotify.spotify_display(Top_tracks_all_time)
 Footer.footer()

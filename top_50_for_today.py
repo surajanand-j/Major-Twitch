@@ -1,14 +1,16 @@
+import io
+from urllib.request import HTTPError
 import requests
 import datetime
 from urllib.parse import urlencode
 import pandas as pd
 import base64
+from base64 import b64decode
+from math import pi
 import requests
+from pprint import pprint
 import pandas as pd
-
-# from skimage import io
-import matplotlib.pyplot as plt
-
+from  pytz import timezone
 
 client_id = '08e04f879f8f47bcbd25377aec2133f4'
 client_secret = '7e78874a40d342c3889e0c82bfd6b6fa'
@@ -125,6 +127,7 @@ class SpotifyAPI(object):
 spotify = SpotifyAPI(client_id, client_secret)
 
 def get_playlist_track_info(search_q = 'Global Top', type_q='playlist'):
+    
     top_50_playlist = spotify.search_generic(search_q, type_q)
     playlist_tracks_request = spotify.get_playlist_tracks(top_50_playlist['playlists']['items'][0]['id'])
 
@@ -148,7 +151,9 @@ def get_playlist_track_info(search_q = 'Global Top', type_q='playlist'):
         preview_url.append(track['track']['preview_url'])
         track_url.append(track['track']['external_urls']['spotify'])
         album_thumbnail.append(track['track']['album']['images'])
-
+        if i>100:
+            break
+    formatted_datetime = datetime.datetime.now(timezone("Asia/Kolkata")).isoformat()
 
     track_dict = {'rank': rank, 
     'album_name': album_name, 
@@ -158,11 +163,13 @@ def get_playlist_track_info(search_q = 'Global Top', type_q='playlist'):
     'id': id, 
     'preview_url': preview_url, 
     'track_url': track_url, 
-    'album_thumbnail': album_thumbnail}
+    'album_thumbnail': album_thumbnail,
+    'time': formatted_datetime
+    }
 
     return track_dict
 
-
+Top_tracks_all_time=get_playlist_track_info('Spotify\'s Most Played All-Time')
 Top_tracks_today = get_playlist_track_info()
 
     

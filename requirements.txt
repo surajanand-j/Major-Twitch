@@ -3,3 +3,4 @@ pymongo[srv]
 htbuilder
 google-api-python-client
 # dateutil.parser==2.8.0
+matplotlib
