@@ -9,11 +9,15 @@ import Games
 import spotify 
 import Fetch
 from top_50_for_today import Top_tracks_all_time
+from search_spotify import search_spotify
+import Youtube_channels 
+import Youtube_Alltime
 
     # st.write(access_token)
 st.sidebar.write('MENU')
-Menu=['Channels','Categories', 'Search Channel', 'Know Twitch Better','Spotify\'s Today\'s Hits','Spotify\'s All Time Hits']
-option=st.sidebar.selectbox("Look into Twitch",Menu,0)
+Menu=['Channels','Categories', 'Search Channel', 'Know Twitch Better',
+    'Spotify\'s Today\'s Hits','Spotify\'s All Time Hits','Search in Youtube','Search in Spotify','Youtube\'s All Time Hits']
+option=st.sidebar.selectbox("Look into Twitch",Menu,3)
 # Menu2=['Spotify']
 # option2=st.sidebar.selectbox("Look into Spotify",Menu2)
 
@@ -42,7 +46,7 @@ if option=='Categories':
     insert_games()
     # @st.cache
     
-    # Games.twitch()
+    Games.twitch()
 
 #Page 2 Channels/Streamers
 elif option=='Channels':
@@ -55,7 +59,7 @@ elif option=='Channels':
     #     threading.Timer(1000.0, repeat).start()
     #     insert_stream()
     insert_stream()
-    # Channels.twitch1()
+    Channels.twitch1()
         
     
 
@@ -91,4 +95,27 @@ elif option=='Spotify\'s All Time Hits':
     header_print()
     loading_bar()
     spotify.spotify_display(Top_tracks_all_time)
+elif option=='Search in Youtube':
+    header_print()
+    loading_bar()
+    st.subheader('Search Youtube')
+    with st.form(key='my_form'):
+        text_input = st.text_input(label='Enter')
+        submit_button = st.form_submit_button(label='Find')   
+    if text_input:
+        Youtube_channels.Youtube_display(text_input)
+    
+elif option=='Search in Spotify':
+    header_print()
+    loading_bar()
+    search_spotify()
+elif option=='Youtube\'s All Time Hits':
+    header_print()
+    loading_bar()
+    st.subheader('Top 50 Songs of all time')
+    Youtube_Alltime.alltime_display()
+    
+
+
+
 Footer.footer()
