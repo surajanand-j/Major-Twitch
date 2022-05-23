@@ -39,8 +39,9 @@ def loading_bar():
         my_bar.progress(percent_complete + 1)
 
 def header_print():
-    st.markdown("<h1 style='text-align: center; color: ;'>Metrics Twitchify</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: ;'>Welcome to Metrics Twitchify.<br> This website was created as a final year project as CS students. <br>We hope you find it useful!</p>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: ;'>Metrics YouTwitchify</h1>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: ;'>Leaderboards and Metrics of Internet's Video, Livestream and Music Content All-In-One place </h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: ;'>Welcome to Metrics YouTwitchify.<br> This website was created as a final year project as CS students. <br>We hope you find it useful!</p>", unsafe_allow_html=True)
     
     # st.header("Metrics Twitchify")
     # st.write("Welcome to Metrics Twitchify. This website was created as a final year project as CS students. We hope you find it useful!")
@@ -117,7 +118,7 @@ elif Fields=='Youtube' and option2=='Search in Youtube':
 elif Fields=='Spotify' and option1=='Spotify track analysis':
     header_print()
     loading_bar()
-    Spotify_analysis.display()
+    # Spotify_analysis.display()
 elif Fields=='Youtube' and option2=='Youtube\'s All Time Hits':
     header_print()
     loading_bar()
