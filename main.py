@@ -9,15 +9,24 @@ import Games
 import spotify 
 import Fetch
 from top_50_for_today import Top_tracks_all_time
-from search_spotify import search_spotify
+import Spotify_analysis
 import Youtube_channels 
 import Youtube_Alltime
 
     # st.write(access_token)
 st.sidebar.write('MENU')
-Menu=['Channels','Categories', 'Search Channel', 'Know Twitch Better',
-    'Spotify\'s Today\'s Hits','Spotify\'s All Time Hits','Search in Youtube','Search in Spotify','Youtube\'s All Time Hits']
-option=st.sidebar.selectbox("Look into Twitch",Menu,3)
+Fields=st.sidebar.radio(
+     "Choose Any one",
+     ('Spotify', 'Twitch', 'Youtube'))
+Menu=['Channels','Categories', 'Search Channel', 'Know Twitch Better']
+Menu1=['Spotify\'s Today\'s Hits','Spotify track analysis','Spotify\'s All Time Hits']
+Menu2=['Search in Youtube','Youtube\'s All Time Hits']
+if Fields=='Twitch':
+    option=st.sidebar.selectbox("Look into Twitch",Menu,3)
+elif Fields=='Spotify':
+    option1=st.sidebar.selectbox("Look into Spotify",Menu1,0)
+elif Fields=='Youtube':
+    option2=st.sidebar.selectbox("Look into Youtube",Menu2,0)
 # Menu2=['Spotify']
 # option2=st.sidebar.selectbox("Look into Spotify",Menu2)
 
@@ -37,7 +46,7 @@ def header_print():
     # st.write("Welcome to Metrics Twitchify. This website was created as a final year project as CS students. We hope you find it useful!")
 
 #Page 1 Top Games
-if option=='Categories':
+if Fields=='Twitch' and option=='Categories':
     header_print()
     loading_bar()
 
@@ -49,7 +58,7 @@ if option=='Categories':
     Games.twitch()
 
 #Page 2 Channels/Streamers
-elif option=='Channels':
+elif Fields=='Twitch' and option=='Channels':
     header_print()
     loading_bar()
        
@@ -63,12 +72,12 @@ elif option=='Channels':
         
     
 
-elif option=='Search Channel':
+elif Fields=='Twitch' and option=='Search Channel':
     header_print()
     loading_bar()
     Search_channel.search_channel()
 
-elif option=='Know Twitch Better':
+elif Fields=='Twitch' and option=='Know Twitch Better':
 #else:
     header_print()
     loading_bar()
@@ -85,17 +94,17 @@ elif option=='Know Twitch Better':
     st.write("Additionally We have provided details about Twitch in the Know Twitch Better page where we have talked about the basics about twitch and how our website can be utilized.")
     st.header("What are Emotes?")
     st.write("When words just aren’t enough, there’s Emotes: Twitch-specific emoticons that viewers and streamers use to express a number of feelings in chat. Emotes are the <3 of Twitch culture. They’re a language of their own. They’re also a way for Partners and Affiliates to reinforce their branding and personalities, and give fans ways to celebrate epic moments, poke fun at fails, spread love in chat, and become active members of your community.")
-elif option=='Spotify\'s Today\'s Hits':
+elif Fields=='Spotify' and option1=='Spotify\'s Today\'s Hits':
     header_print()
     loading_bar()
     Result=Fetch.Spotify_data()
     spotify.spotify_display(Result)
     Insert.insert_spotify_data()
-elif option=='Spotify\'s All Time Hits':
+elif Fields=='Spotify' and option1=='Spotify\'s All Time Hits':
     header_print()
     loading_bar()
     spotify.spotify_display(Top_tracks_all_time)
-elif option=='Search in Youtube':
+elif Fields=='Youtube' and option2=='Search in Youtube':
     header_print()
     loading_bar()
     st.subheader('Search Youtube')
@@ -105,11 +114,11 @@ elif option=='Search in Youtube':
     if text_input:
         Youtube_channels.Youtube_display(text_input)
     
-elif option=='Search in Spotify':
+elif Fields=='Spotify' and option1=='Spotify track analysis':
     header_print()
     loading_bar()
-    search_spotify()
-elif option=='Youtube\'s All Time Hits':
+    Spotify_analysis.display()
+elif Fields=='Youtube' and option2=='Youtube\'s All Time Hits':
     header_print()
     loading_bar()
     st.subheader('Top 50 Songs of all time')

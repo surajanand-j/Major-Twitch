@@ -199,3 +199,9 @@ def durationplot(df):
     sns.distplot(df['duration'])
 
     return fig
+def duration_analysis(df):
+    fig, ax = plt.subplots(1,2, figsize=(16,5))
+    sns.scatterplot(data = df, x = 'duration', y = 'viewCount', ax = ax[0])
+    sns.scatterplot(data = df, x = 'duration', y = 'likeCount', ax = ax[1])
+
+    return fig

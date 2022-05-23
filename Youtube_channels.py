@@ -78,10 +78,10 @@ def Youtube_display(Result):
     st.write('If a strong corelation between the metrics is present, the scatter plot will signify a positive slope line. ')
     
     st.info('Duration Analysis')
-    st.pyplot(youtube_channels_helper.durationplot(video_detail))
-    st.success('This histogram plot shows the relation between the duration of each video in seconds and the amount of videos of that duration.')
+    st.pyplot(youtube_channels_helper.duration_analysis(video_detail))
+    st.success('This plot provides a correlation analysis between the duration of a video and how much views or likes the video gets as the duration increases.')
     st.write('Interpretation:')
-    st.write('The high points signify the concentration of videos with that duration.')
+    st.write('The points being lower and closer to the x axis after a point shows that as the duration of the videos increases, the amount of views and likes the video gets keeps declining. This shows a general trend in people wanting to consume short form video content on youtube.')
     
 
 

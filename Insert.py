@@ -14,7 +14,6 @@ access_token = json.loads(config.access_code.text)
 access_token = access_token['access_token']
 
 
-
 from pymongo import MongoClient
 
 headers = {
