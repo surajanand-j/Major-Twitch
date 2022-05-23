@@ -122,7 +122,7 @@ elif Fields=='Spotify' and option1=='Spotify track analysis':
 elif Fields=='Youtube' and option2=='Youtube\'s All Time Hits':
     header_print()
     loading_bar()
-    st.subheader('Top 50 Songs of all time')
+    st.subheader('Top 50 Videos of all time')
     Youtube_Alltime.alltime_display()
     
 
