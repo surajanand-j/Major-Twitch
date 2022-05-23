@@ -71,7 +71,7 @@ def Youtube_display(Result):
     st.write('If a very long graph is obtained, it means that the variability in video performance is high. There are videos with very low view count and some videos with very high viewcount.')
     st.write('The point where the graph is the widest signifies the general performance of the videos.')
     
-    st.info('Corelation Analysis')
+    st.info('Correlation Analysis')
     st.pyplot(youtube_channels_helper.stat_analysis_fig(video_detail))
     st.success('This scatter plot shows if there is any corelation between the three metrics of a video, that is, the view count, like count, and the comment count.')
     st.write('Interpretation:')
