@@ -98,17 +98,19 @@ elif Fields=='Twitch' and option=='Know Twitch Better':
 elif Fields=='Spotify' and option1=='Spotify\'s Today\'s Hits':
     header_print()
     loading_bar()
+    st.subheader('Today\'s Top Hits')
     Result=Fetch.Spotify_data()
     spotify.spotify_display(Result)
     Insert.insert_spotify_data()
 elif Fields=='Spotify' and option1=='Spotify\'s All Time Hits':
     header_print()
     loading_bar()
+    st.subheader('All Time Top Hits')
     spotify.spotify_display(Top_tracks_all_time)
 elif Fields=='Youtube' and option2=='Search in Youtube':
     header_print()
     loading_bar()
-    st.subheader('Search Youtube')
+    st.subheader('Search Channel On Youtube')
     with st.form(key='my_form'):
         text_input = st.text_input(label='Enter')
         submit_button = st.form_submit_button(label='Find')   
