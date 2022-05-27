@@ -19,14 +19,14 @@ Fields=st.sidebar.radio(
      "Choose Any one",
      ('Spotify', 'Twitch', 'Youtube'))
 Menu=['Channels','Categories', 'Search Channel', 'Know Twitch Better']
-Menu1=['Spotify\'s Today\'s Hits','Spotify track analysis','Spotify\'s All Time Hits']
-Menu2=['Search in Youtube','Youtube\'s All Time Hits']
+Menu1=['Spotify\'s Today\'s Hits','Know Spotify Better','Spotify\'s All Time Hits']
+Menu2=['Search in Youtube','Youtube\'s All Time Hits','Know Youtube Better']
 if Fields=='Twitch':
     option=st.sidebar.selectbox("Look into Twitch",Menu,3)
 elif Fields=='Spotify':
-    option1=st.sidebar.selectbox("Look into Spotify",Menu1,0)
+    option1=st.sidebar.selectbox("Look into Spotify",Menu1,1)
 elif Fields=='Youtube':
-    option2=st.sidebar.selectbox("Look into Youtube",Menu2,0)
+    option2=st.sidebar.selectbox("Look into Youtube",Menu2,2)
 # Menu2=['Spotify']
 # option2=st.sidebar.selectbox("Look into Spotify",Menu2)
 
@@ -107,6 +107,19 @@ elif Fields=='Spotify' and option1=='Spotify\'s All Time Hits':
     loading_bar()
     st.subheader('All Time Top Hits')
     spotify.spotify_display(Top_tracks_all_time)
+
+
+elif Fields=='Spotify' and option1=='Know Spotify Better':
+    header_print()
+    loading_bar()
+    st.header("What is Spotify?")
+    st.write("Spotify is a digital music, podcast, and video service that gives you access to millions of songs and other content from creators all over the world.")
+    st.write("Basic functions such as playing music are totally free, but you can also choose to upgrade to Spotify Premium.")
+    st.header("Where can I use Spotify?")
+    st.write("Spotify is available across a range of devices, including computers, phones, tablets, speakers, TVs, and cars, and you can easily transition from one to another with Spotify Connect.")
+    st.header("Can I keep music from Spotify?")
+    st.write("Spotify only gives access to music and podcasts through our apps. Our licensing means there's no way to export our content outside of the app.")
+
 elif Fields=='Youtube' and option2=='Search in Youtube':
     header_print()
     loading_bar()
@@ -117,17 +130,29 @@ elif Fields=='Youtube' and option2=='Search in Youtube':
     if text_input:
         Youtube_channels.Youtube_display(text_input)
     
-elif Fields=='Spotify' and option1=='Spotify track analysis':
-    header_print()
-    loading_bar()
+
     # Spotify_analysis.display()
 elif Fields=='Youtube' and option2=='Youtube\'s All Time Hits':
     header_print()
     loading_bar()
     st.subheader('Top 50 Videos of all time')
     Youtube_Alltime.alltime_display()
-    
+elif Fields=='Youtube' and option2=='Know Youtube Better':
+    header_print()
+    loading_bar()
+    st.header("What Is YouTube?")
+
+    st.write("YouTube is an American online video sharing and social media platform. it is a free video sharing website that makes it easy to watch online videos. You can even create and upload your own videos to share with others. Owned by Google, it is the second most visited website, right after Google itself.")
+    st.header("Why use YouTube?")
+
+    st.write("One reason YouTube is so popular is the sheer number of videos you can find. On average, 100 hours of video are uploaded to YouTube every minute, so there's always something new to watch! And you'll find all kinds of videos on YouTube, quite literally anything you feel like watching content on will be found on YouTube. Film and television companies maintain a tight control over their own content and block illegal sharing of their content. With user generated content, it can cater to any niche. Many use it for entertainment purposes, for learning how to do something (tutorials), for keeping up with their favorite artists' latest music videos, and more.")
+
+    st.header("Where can I watch videos on YouTube?")
+
+    st.write("Navigating to youtube.com and watching a suggested video or searching for one. or you can download the YouTube mobile app for iOS or Android and do the same there. You can watching a YouTube video that was embedded into a post on a social network (like Facebook or Twitter). You can Watch a YouTube video that was embedded into a web page or blog post.")
 
 
 
 Footer.footer()
+
+
