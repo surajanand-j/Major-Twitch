@@ -1,5 +1,5 @@
 import streamlit as st
-from pandas.io.json import json_normalize
+from pandas import json_normalize
 import time
 import Footer
 import Insert

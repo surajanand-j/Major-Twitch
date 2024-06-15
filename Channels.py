@@ -7,6 +7,14 @@ import pandas as pd
 from datetime import timedelta
 from viewcount_create import Fetch_all_docs
 all_docs_channels=Fetch_all_docs()
+
+def parse_datetime(dt_str):
+    try:
+        return pd.to_datetime(dt_str, utc=True, format='%Y-%m-%dT%H:%M:%S.%f%z')
+    except ValueError:
+        return pd.to_datetime(dt_str, utc=True, format='%Y-%m-%dT%H:%M:%S.%f')
+
+
 def twitch1():
     # 
     # threading.Timer(100.0, twitch1).start()
@@ -43,6 +51,10 @@ def twitch1():
 
     # Printing Sreamer Data on Channels Page
     Number=0
+
+ 
+
+
     for _ in range(len(Streamers_data)-1):  
         cols = st.columns(2)
         
@@ -97,6 +109,11 @@ def twitch1():
 
             
             if not chart_data.empty:
+
+                chart_data['time'] = chart_data['time'].apply(parse_datetime)
+
+# Convert from UTC to desired timezone (+05:30)
+                chart_data['time'] = chart_data['time'].dt.tz_convert('Asia/Kolkata')
                 chart_data['time'] =  pd.to_datetime(chart_data['time'])+timedelta(hours=5,minutes=30)
                 # st.write(chart_data)
                 chart_data = chart_data.rename(columns={'time':'index'}).set_index('index')
