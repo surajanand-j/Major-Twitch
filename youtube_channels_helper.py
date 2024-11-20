@@ -182,8 +182,8 @@ def top_videos_of_channel(df, parameter='viewCount', amount = 5):
     return df.sort_values(parameter, ascending=False)[:amount]
 
 def violinplot(df):
-    fig = plt.figure(figsize=(8,6))
-    sns.violinplot(df['channelTitle'], df['viewCount'])
+    fig = plt.figure(figsize=(8, 6))
+    sns.violinplot(x='channelTitle', y='viewCount', data=df)
     return fig
 
 def stat_analysis_fig(df):
